@@ -64,20 +64,12 @@ int main()
     if (i == 1)
         printf("Player %d wins!! \n", --player);
     else
-        printf("a Tie!! \n");
+        printf("It's a Tie!! \n");
 
     getchar();
 
     return 0;
 }
-
-/*********************************************
-
-FUNCTION TO RETURN GAME STATUS
-1 FOR GAME IS OVER WITH RESULT
--1 FOR GAME IS IN PROGRESS
-O GAME IS OVER AND NO RESULT
- **********************************************/
 
 int checkwin()
 {
@@ -113,10 +105,6 @@ int checkwin()
         return -1;
 }
 
-/*******************************************************************
-FUNCTION TO DRAW BOARD OF TIC TAC TOE WITH PLAYERS MARK
- ********************************************************************/
-
 void board()
 {
     system("clear");
@@ -139,7 +127,3 @@ void board()
 
     printf("     |     |     \n\n");
 }
-
-/*******************************************************************
-END OF PROJECT
- ********************************************************************/
