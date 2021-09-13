@@ -1,19 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define MAX 20
 
 char square[10] = {'o', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+int player1Score = 0;
+int player2Score = 0;
+int numberOfGames;
+int k;
 
-int checkwin();
+int checkSingleGameWinner();
+int checkGameWinner(int k);
 void board(int player1Score, int player2Score);
+void resetSquare();
 
 int main()
 {
-    int player = 1, i, j, out = 1, numberOfGames, choice;
-    int player1Score = 0;
-    int player2Score = 0;
+    int player = 1, i, j, out = 1, choice;
     char mark;
-    char player1[20];
-    char player2[20];
 
     do
     {
@@ -30,7 +33,7 @@ int main()
         }
     } while (out == 1);
 
-    for (int k = 0; k < numberOfGames; k++)
+    for (k = 0; k < numberOfGames; k++)
     {
         do
         {
@@ -72,11 +75,10 @@ int main()
             else
             {
                 printf("Invalid move ");
-
                 player--;
                 getchar();
             }
-            i = checkwin();
+            i = checkSingleGameWinner();
 
             player++;
         } while (i == -1);
@@ -86,31 +88,29 @@ int main()
         if (i == 1)
         {
             printf("Player %d wins!! \n", --player);
-            player1Score++;
-            square[0] = 'o';
-            square[1] = '1';
-            square[2] = '2';
-            square[3] = '3';
-            square[4] = '4';
-            square[5] = '5';
-            square[6] = '6';
-            square[7] = '7';
-            square[8] = '8';
-            square[9] = '9';
+            if (player % 2 != 0)
+                player1Score++;
+            else
+                player2Score++;
+            resetSquare();
         }
         else
         {
             printf("It's a Tie!! \n");
-            square[0] = 'o';
-            square[1] = '1';
-            square[2] = '2';
-            square[3] = '3';
-            square[4] = '4';
-            square[5] = '5';
-            square[6] = '6';
-            square[7] = '7';
-            square[8] = '8';
-            square[9] = '9';
+            --player;
+            resetSquare();
+        }
+
+        if (checkGameWinner(k) == 1)
+        {
+            printf("Player %d wins!! \n", --player);
+            break;
+        }
+
+        if (checkGameWinner(k) == -1)
+        {
+            printf("Player %d wins!! \n", --player);
+            break;
         }
 
         getchar();
@@ -121,7 +121,21 @@ int main()
     return 0;
 }
 
-int checkwin()
+void resetSquare()
+{
+    square[0] = 'o';
+    square[1] = '1';
+    square[2] = '2';
+    square[3] = '3';
+    square[4] = '4';
+    square[5] = '5';
+    square[6] = '6';
+    square[7] = '7';
+    square[8] = '8';
+    square[9] = '9';
+}
+
+int checkSingleGameWinner()
 {
     if (square[1] == square[2] && square[2] == square[3])
         return 1;
@@ -155,12 +169,39 @@ int checkwin()
         return -1;
 }
 
+int checkGameWinner(int k)
+{
+    if (player1Score >= (numberOfGames + 1) / 2)
+        return 1;
+
+    if (player2Score >= (numberOfGames + 1) / 2)
+        return -1;
+
+    if (k == numberOfGames && player1Score > player2Score)
+        return 1;
+
+    if (k == numberOfGames && player1Score < player2Score)
+        return -1;
+
+    if (k == numberOfGames && player1Score == player2Score)
+        return 2;
+
+    return 0;
+}
+
 void board(int player1Score, int player2Score)
 {
     system("clear");
     printf("\n\n\tTic Tac Toe\n\n");
 
     printf("Player 1 (X): %d -  Player 2 (O): %d \n\n\n", player1Score, player2Score);
+
+    if (checkGameWinner(k) == 1)
+        printf("\tPlayer 1 wins!! \n");
+    if (checkGameWinner(k) == -1)
+        printf("\tPlayer 2 wins!! \n");
+    if (checkGameWinner(k) == 2)
+        printf("\tIt's a tie \n");
 
     printf("     |     |     \n");
     printf("  %c  |  %c  |  %c \n", square[1], square[2], square[3]);
