@@ -1,23 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX 20
 
 char square[10] = {'o', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+char player1[MAX] = {'P', 'l', 'a', 'y', 'e', 'r', ' ', '1'};
+int numberOfPlayers;
+
 int player1Score = 0;
 int player2Score = 0;
 int numberOfGames;
 int k;
+int choice;
+int difficulty;
 
 int checkSingleGameWinner();
 int checkGameWinner(int k);
+void easyAutogame();
+void hardAutogame();
 void board(int player1Score, int player2Score);
 void resetSquare();
 
 int main()
 {
-    int player = 1, i, j, out = 1, choice;
+    int player = 1, i, j, out = 1;
     char mark;
 
+    printf("Player 1 Name : ");
+    fgets(player1, MAX, stdin);
+    player1[strcspn(player1, "\n")] = 0;
+
+    do
+    {
+        printf("Select the level: \n\n\t 1. Easy \n\t 2. Hard \n");
+        scanf("%d", &difficulty);
+
+        if (difficulty != 1 && difficulty != 2)
+        {
+            printf("invalid choice\n");
+        }
+        else
+        {
+            out = -1;
+        }
+    } while (out == 1);
+
+    out = 1;
     do
     {
         printf("please provide the number of games you want to play? ===> 1, 3 ,5\n");
@@ -40,8 +68,16 @@ int main()
             board(player1Score, player2Score);
             player = (player % 2) ? 1 : 2;
 
-            printf("Player %d, enter a number:  ", player);
-            scanf("%d", &choice);
+            if (player == 1)
+            {
+                printf("%s, enter a number:  ", player1);
+                scanf("%d", &choice);
+            }
+
+            else if (difficulty == 1 && player == 2)
+                easyAutogame();
+            else
+                hardAutogame();
 
             mark = (player == 1) ? 'X' : 'O';
 
@@ -189,15 +225,94 @@ int checkGameWinner(int k)
     return 0;
 }
 
+void easyAutogame()
+{
+    int num = (rand() % 10);
+    if (square[num] != 'X' && square[num] != 'O')
+        choice = (int)square[num] - '0';
+    else
+        easyAutogame();
+}
+
+void hardAutogame()
+{
+    if (square[5] == '5')
+        choice = 5;
+    else
+    {
+        if (square[1] == 'X' && square[2] == 'X' && square[3] == '3')
+            choice = 3;
+
+        else if (square[2] == 'X' && square[3] == 'X' && square[1] == '1')
+            choice = 1;
+
+        else if (square[1] == 'X' && square[3] == 'X' && square[2] == '2')
+            choice = 2;
+
+        else if (square[4] == 'X' && square[5] == 'X' && square[6] == '6')
+            choice = 6;
+
+        else if (square[5] == 'X' && square[6] == 'X' && square[4] == '4')
+            choice = 4;
+
+        else if (square[7] == 'X' && square[8] == 'X' && square[9] == '9')
+            choice = 9;
+
+        else if (square[8] == 'X' && square[9] == 'X' && square[7] == '7')
+            choice = 7;
+
+        else if (square[7] == 'X' && square[9] == 'X' && square[8] == '8')
+            choice = 8;
+
+        else if (square[1] == 'X' && square[4] == 'X' && square[7] == '7')
+            choice = 7;
+
+        else if (square[4] == 'X' && square[7] == 'X' && square[1] == '1')
+            choice = 1;
+
+        else if (square[1] == 'X' && square[7] == 'X' && square[4] == '4')
+            choice = 4;
+
+        else if (square[2] == 'X' && square[5] == 'X' && square[8] == '8')
+            choice = 8;
+
+        else if (square[5] == 'X' && square[8] == 'X' && square[2] == '2')
+            choice = 2;
+
+        else if (square[3] == 'X' && square[6] == 'X' && square[9] == '9')
+            choice = 9;
+
+        else if (square[6] == 'X' && square[9] == 'X' && square[3] == '3')
+            choice = 3;
+
+        else if (square[3] == 'X' && square[9] == 'X' && square[6] == '6')
+            choice = 6;
+
+        else if (square[1] == 'X' && square[5] == 'X' && square[9] == '9')
+            choice = 9;
+
+        else if (square[5] == 'X' && square[9] == 'X' && square[1] == '1')
+            choice = 1;
+
+        else if (square[3] == 'X' && square[5] == 'X' && square[7] == '7')
+            choice = 7;
+
+        else if (square[7] == 'X' && square[5] == 'X' && square[3] == '3')
+            choice = 3;
+        else
+            easyAutogame();
+    };
+}
+
 void board(int player1Score, int player2Score)
 {
     system("clear");
     printf("\n\n\tTic Tac Toe\n\n");
 
-    printf("Player 1 (X): %d -  Player 2 (O): %d \n\n\n", player1Score, player2Score);
+    printf("%s (X): %d -  Player 2 (O): %d \n\n\n", player1, player1Score, player2Score);
 
     if (checkGameWinner(k) == 1)
-        printf("\tPlayer 1 wins!! \n");
+        printf("\t%s wins!! \n", player1);
     if (checkGameWinner(k) == -1)
         printf("\tPlayer 2 wins!! \n");
     if (checkGameWinner(k) == 2)
