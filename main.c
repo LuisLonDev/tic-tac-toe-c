@@ -20,6 +20,7 @@ void easyAutogame();
 void hardAutogame();
 void board(int player1Score, int player2Score);
 void resetSquare();
+void filePersistence();
 
 int main()
 {
@@ -304,6 +305,25 @@ void hardAutogame()
     };
 }
 
+void filePersistence()
+{
+    char player1ScoreString[MAX];
+    char player2ScoreString[MAX];
+    sprintf(player1ScoreString, "%d", player1Score);
+    sprintf(player2ScoreString, "%d", player2Score);
+
+    FILE *archivo;
+    archivo = fopen("gameRegistry.txt", "a");
+    fputs(player1, archivo);
+    fputs(": ", archivo);
+    fputs(player1ScoreString, archivo);
+    fputs(", ", archivo);
+    fputs("Player 2: ", archivo);
+    fputs(player2ScoreString, archivo);
+    fputs(" \n", archivo);
+    fclose(archivo);
+}
+
 void board(int player1Score, int player2Score)
 {
     system("clear");
@@ -312,9 +332,17 @@ void board(int player1Score, int player2Score)
     printf("%s (X): %d -  Player 2 (O): %d \n\n\n", player1, player1Score, player2Score);
 
     if (checkGameWinner(k) == 1)
+    {
         printf("\t%s wins!! \n", player1);
+        filePersistence();
+    }
+
     if (checkGameWinner(k) == -1)
+    {
         printf("\tPlayer 2 wins!! \n");
+        filePersistence();
+    }
+
     if (checkGameWinner(k) == 2)
         printf("\tIt's a tie \n");
 
